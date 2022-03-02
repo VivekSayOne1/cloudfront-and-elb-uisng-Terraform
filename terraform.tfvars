@@ -1,5 +1,5 @@
-    access_key          = 
-    secret_key          = 
+    access_key        = 
+    secret_key        = 
     ami               = 
     key_name          = 
 
