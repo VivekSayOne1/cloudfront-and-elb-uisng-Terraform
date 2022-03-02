@@ -49,9 +49,7 @@ data "aws_iam_policy_document" "allow_access_from_another_account" {
       #identifiers  = ["aws_iam_user.iam-user.id"]
     }  
     actions = [
-       "s3:GetObject",
-       "s3:PutBucketAcl",
-       "s3:GetBucketAcl"
+       "s3:GetObject"
        
     ]
 
