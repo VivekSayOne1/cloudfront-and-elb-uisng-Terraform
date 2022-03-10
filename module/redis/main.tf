@@ -7,7 +7,6 @@ resource "aws_elasticache_cluster" "redis_cluster" {
   engine_version       = "6.x"
   port                 = "6379"
   availability_zone = var.availability_zone
-  security_group_ids = [ var.redis_sg ]
   subnet_group_name  = aws_elasticache_subnet_group.redis_sub.name
   
 }
