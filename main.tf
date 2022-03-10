@@ -29,7 +29,7 @@ resource "aws_instance" "jenkins_server" {
 
 
 
-
+/*
 resource "aws_eip" "jenkins-eip" {
   vpc        = true
  
@@ -37,7 +37,7 @@ resource "aws_eip" "jenkins-eip" {
   instance = aws_instance.jenkins_server[0].id
   depends_on = [module.vpc.gatewayid]
 
-}
+}*/
 module "vpc" {
  source  = "./module/vpc"
  availability_zone = var.availability_zone
