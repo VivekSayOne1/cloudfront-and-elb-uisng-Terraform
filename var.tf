@@ -2,7 +2,7 @@ provider "aws" {
  secret_key = var.secret_key
  access_key = var.access_key
  region     = var.region
- version    = "4.4.0"  
+ 
 }
 variable "secret_key" {
   description = "secret_key for aws"
