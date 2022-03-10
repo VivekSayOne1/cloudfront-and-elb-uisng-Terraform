@@ -30,9 +30,7 @@ resource "aws_elasticsearch_domain" "terraform" {
      enforce_https = true
      tls_security_policy = "Policy-Min-TLS-1-0-2019-07"
    }    
-  tags = {
-    Domain = "terraform"
-  }
+  
 }
 /*
 resource "aws_elasticsearch_domain_policy" "main" {
