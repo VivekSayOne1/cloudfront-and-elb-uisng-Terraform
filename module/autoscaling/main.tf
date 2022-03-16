@@ -1,9 +1,3 @@
-/*
-resource "aws_placement_group" "terraform-placement_group" {
-  name     = "placement_group"
-  strategy = "cluster"
-}*/
-
 resource "aws_launch_template" "terraform_launch" {
   name_prefix   = "tf_launch"
   image_id      = aws_ami_from_instance.new_ec2_ami.id 
@@ -42,13 +36,6 @@ resource "aws_autoscaling_group" "terraform_autoscaling_group" {
     version = "$Latest"
   }
  
-/*  initial_lifecycle_hook {
-    name                 = "terraform_lifecycle"
-    default_result       = "CONTINUE"
-    heartbeat_timeout    = 2000
-    lifecycle_transition = "autoscaling:EC2_INSTANCE_LAUNCHING"
-
-  } */
   
 }
 resource "aws_ami_from_instance" "new_ec2_ami" {
