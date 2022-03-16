@@ -1,9 +1,3 @@
-/*
-resource "aws_placement_group" "terraform-placement_group" {
-  name     = "placement_group"
-  strategy = "cluster"
-}*/
-
 resource "aws_launch_template" "terraform_launch" {
   name_prefix   = "tf_launch"
   image_id      = aws_ami_from_instance.new_ec2_ami.id 
@@ -28,8 +22,8 @@ resource "aws_launch_template" "terraform_launch" {
 
 resource "aws_autoscaling_group" "terraform_autoscaling_group" {
   name                      = "terraform_autoscaling_gp"
-  max_size                  = 10
-  min_size                  = 1
+  max_size                  = 5
+  min_size                  = 2
   health_check_grace_period = 300
   health_check_type         = "ELB"
   #desired_capacity          = 4
@@ -42,7 +36,9 @@ resource "aws_autoscaling_group" "terraform_autoscaling_group" {
     version = "$Latest"
   }
  
-/*  initial_lifecycle_hook {
+   /* 
+
+    initial_lifecycle_hook {
     name                 = "terraform_lifecycle"
     default_result       = "CONTINUE"
     heartbeat_timeout    = 2000
@@ -61,63 +57,18 @@ resource "aws_autoscaling_policy" "target_track" {
   # scaling_adjustment   = 1
    adjustment_type = "ChangeInCapacity"
 
-   policy_type            = "StepScaling"
+   policy_type            = "TargetTrackingScaling"
 
-  step_adjustment {
-    scaling_adjustment          = 1
-    metric_interval_lower_bound = 30
-    metric_interval_upper_bound = 40
-  }
+   target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
 
-  step_adjustment {
-    scaling_adjustment          = 2
-    metric_interval_lower_bound = 40
-    #metric_interval_upper_bound = 
+    target_value = 60.0
+
   }
-   
   
   
 }
 
-resource "aws_autoscaling_policy" "step_scaling" {
-   name = "scale-down"
-   autoscaling_group_name = aws_autoscaling_group.terraform_autoscaling_group.name
-  # scaling_adjustment   = 1
-   adjustment_type = "ChangeInCapacity"
-
-   policy_type            = "StepScaling"
-
-  step_adjustment {
-    scaling_adjustment          = -2
-    metric_interval_lower_bound = 10
-    metric_interval_upper_bound = 20
-  }
-
-  step_adjustment {
-    scaling_adjustment          = -1
-    metric_interval_lower_bound = 20
-    #metric_interval_upper_bound = 30
-  }
-   
-  
-  
-}
-resource "aws_cloudwatch_metric_alarm" "terraform_alarm" {
-  alarm_name                = "terraform-test-auto"
-  comparison_operator       = "GreaterThanOrEqualToThreshold"
-  evaluation_periods        = "2"
-  metric_name               = "CPUUtilization"
-  namespace                 = "AWS/EC2"
-  period                    = "120"
-  statistic                 = "Average"
-  threshold                 = "40"
-  alarm_description         = "This metric monitors ec2 cpu utilization"
-  
-
-  dimensions = {
-    AutoScalingGroupName = aws_autoscaling_group.terraform_autoscaling_group.name
-  }
-
-   alarm_actions     = [aws_autoscaling_policy.target_track.arn,aws_autoscaling_policy.step_scaling.arn]
-}
 
